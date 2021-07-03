@@ -1,6 +1,6 @@
 
-local QuestAnnounce = LibStub("AceAddon-3.0"):GetAddon("QuestAnnounce")
-local L = LibStub("AceLocale-3.0"):GetLocale("QuestAnnounce")
+local QuestAnnounce2 = LibStub("AceAddon-3.0"):GetAddon("QuestAnnounce2")
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestAnnounce2")
 local LSM = LibStub("LibSharedMedia-3.0")
 
 local options, configOptions = nil, {}
@@ -9,7 +9,7 @@ local function getOptions()
 	if not options then
 		options = {
 		    type = "group",
-			name ="QuestAnnounce",			
+			name ="QuestAnnounce2",			
 		    args = {
 				general = {
 					order = 1,
@@ -23,25 +23,25 @@ local function getOptions()
 							name = L["Settings"],
 							get = function(info)
 								local key = info.arg or info[#info]
-								QuestAnnounce:SendDebugMsg("getSettings: "..key.." :: "..tostring(QuestAnnounce.db.profile.settings[key]))
-								return QuestAnnounce.db.profile.settings[key]
+								QuestAnnounce2:SendDebugMsg("getSettings: "..key.." :: "..tostring(QuestAnnounce2.db.profile.settings[key]))
+								return QuestAnnounce2.db.profile.settings[key]
 							end,
 							set = function(info, value)
 								local key = info.arg or info[#info]
-								QuestAnnounce.db.profile.settings[key] = value
+								QuestAnnounce2.db.profile.settings[key] = value
 								if(key == "soundNameObj") then
-									QuestAnnounce.db.profile.settings.soundFileObj = LSM:Fetch("sound", QuestAnnounce.db.profile.settings.soundNameObj)
+									QuestAnnounce2.db.profile.settings.soundFileObj = LSM:Fetch("sound", QuestAnnounce2.db.profile.settings.soundNameObj)
 								elseif(key == "soundNameQuest") then
-									QuestAnnounce.db.profile.settings.soundFileQuest = LSM:Fetch("sound", QuestAnnounce.db.profile.settings.soundNameQuest)
+									QuestAnnounce2.db.profile.settings.soundFileQuest = LSM:Fetch("sound", QuestAnnounce2.db.profile.settings.soundNameQuest)
 								end
-								QuestAnnounce:SendDebugMsg("setSettings: "..key.." :: "..tostring(QuestAnnounce.db.profile.settings[key]))
+								QuestAnnounce2:SendDebugMsg("setSettings: "..key.." :: "..tostring(QuestAnnounce2.db.profile.settings[key]))
 							end,
 							args = {
 								enabledesc = {
 									order = 1,
 									type = "description",
 									fontSize = "medium",
-									name = L["Enable/Disable QuestAnnounce"]
+									name = L["Enable/Disable QuestAnnounce2"]
 								},
 								enable = {
 									order = 2,
@@ -66,7 +66,7 @@ local function getOptions()
 									order = 5,
 									type = "description",
 									fontSize = "medium",
-									name = L["Enable/Disable QuestAnnounce Sounds"]
+									name = L["Enable/Disable QuestAnnounce2 Sounds"]
 									
 								},
 								soundCompletion = {
@@ -93,7 +93,7 @@ local function getOptions()
 									order = 100,
 									type = "description",
 									fontSize = "medium",
-									name = L["Enable/Disable QuestAnnounce Debug Mode"]
+									name = L["Enable/Disable QuestAnnounce2 Debug Mode"]
 								},
 								debug = {
 									order = 101,
@@ -104,7 +104,7 @@ local function getOptions()
 									order = 102,
 									type = "execute",
 									name = "Test Frame Messages",
-									func = function() QuestAnnounce:SendMsg(L["QuestAnnounce Test Message"]) end
+									func = function() QuestAnnounce2:SendMsg(L["QuestAnnounce2 Test Message"]) end
 								}
 							}
 						},
@@ -115,13 +115,13 @@ local function getOptions()
 							name = L["Where do you want to make the announcements?"],
 							get = function(info)
 								local key = info.arg or info[#info]
-								QuestAnnounce:SendDebugMsg("getAnnounceTo: "..key.." :: "..tostring(QuestAnnounce.db.profile.announceTo[key]))
-								return QuestAnnounce.db.profile.announceTo[key]
+								QuestAnnounce2:SendDebugMsg("getAnnounceTo: "..key.." :: "..tostring(QuestAnnounce2.db.profile.announceTo[key]))
+								return QuestAnnounce2.db.profile.announceTo[key]
 							end,
 							set = function(info, value)
 								local key = info.arg or info[#info]
-								QuestAnnounce.db.profile.announceTo[key] = value
-								QuestAnnounce:SendDebugMsg("setAnnounceTo: "..key.." :: "..tostring(QuestAnnounce.db.profile.announceTo[key]))
+								QuestAnnounce2.db.profile.announceTo[key] = value
+								QuestAnnounce2:SendDebugMsg("setAnnounceTo: "..key.." :: "..tostring(QuestAnnounce2.db.profile.announceTo[key]))
 							end,
 							args = {
 								chatFrame = {
@@ -148,22 +148,22 @@ local function getOptions()
 							name = L["What channels do you want to make the announcements?"],
 							get = function(info)
 								local key = info.arg or info[#info]
-								QuestAnnounce:SendDebugMsg("getAnnounceIn: "..key.." :: "..tostring(QuestAnnounce.db.profile.announceIn[key]))
+								QuestAnnounce2:SendDebugMsg("getAnnounceIn: "..key.." :: "..tostring(QuestAnnounce2.db.profile.announceIn[key]))
 								if (key == "selfColor") then
-									return QuestAnnounce.db.profile.announceIn.selfColor.r, QuestAnnounce.db.profile.announceIn.selfColor.g, QuestAnnounce.db.profile.announceIn.selfColor.b, 1.0
+									return QuestAnnounce2.db.profile.announceIn.selfColor.r, QuestAnnounce2.db.profile.announceIn.selfColor.g, QuestAnnounce2.db.profile.announceIn.selfColor.b, 1.0
 								else
-									return QuestAnnounce.db.profile.announceIn[key]
+									return QuestAnnounce2.db.profile.announceIn[key]
 								end
 							end,
 							set = function(info, ...)
 								local key = info.arg or info[#info]
 								if (key == "selfColor") then
-									QuestAnnounce.db.profile.announceIn.selfColor.r, QuestAnnounce.db.profile.announceIn.selfColor.g, QuestAnnounce.db.profile.announceIn.selfColor.b = ...
-									QuestAnnounce.db.profile.announceIn.selfColor.hex = "|cff"..string.format("%02x%02x%02x", QuestAnnounce.db.profile.announceIn.selfColor.r * 255, QuestAnnounce.db.profile.announceIn.selfColor.g * 255, QuestAnnounce.db.profile.announceIn.selfColor.b * 255) 
+									QuestAnnounce2.db.profile.announceIn.selfColor.r, QuestAnnounce2.db.profile.announceIn.selfColor.g, QuestAnnounce2.db.profile.announceIn.selfColor.b = ...
+									QuestAnnounce2.db.profile.announceIn.selfColor.hex = "|cff"..string.format("%02x%02x%02x", QuestAnnounce2.db.profile.announceIn.selfColor.r * 255, QuestAnnounce2.db.profile.announceIn.selfColor.g * 255, QuestAnnounce2.db.profile.announceIn.selfColor.b * 255) 
 								else
-									QuestAnnounce.db.profile.announceIn[key] = ...
+									QuestAnnounce2.db.profile.announceIn[key] = ...
 								end
-								QuestAnnounce:SendDebugMsg("setAnnounceIn: "..key.." :: "..tostring(QuestAnnounce.db.profile.announceIn[key]))
+								QuestAnnounce2:SendDebugMsg("setAnnounceIn: "..key.." :: "..tostring(QuestAnnounce2.db.profile.announceIn[key]))
 							end,
 							args = {
 								say = {
@@ -225,10 +225,10 @@ local function getOptions()
 									order = 9,
 									type = "color",
 									name = "Self Color",
-									--get = function() return QuestAnnounce.db.profile.selfColor.r, QuestAnnounce.db.profile.selfColor.g, QuestAnnounce.db.profile.selfColor.b, 1.0 end,
+									--get = function() return QuestAnnounce2.db.profile.selfColor.r, QuestAnnounce2.db.profile.selfColor.g, QuestAnnounce2.db.profile.selfColor.b, 1.0 end,
 									--set = function(info, r, g, b, a)
-									--	QuestAnnounce.db.profile.selfColor.r, QuestAnnounce.db.profile.selfColor.g, QuestAnnounce.db.profile.selfColor.b = r, g, b
-									--	QuestAnnounce.db.profile.selfColor.hex = "|cff"..string.format("%02x%02x%02x", QuestAnnounce.db.profile.selfColor.r * 255, QuestAnnounce.db.profile.selfColor.g * 255, QuestAnnounce.db.profile.selfColor.b * 255) 
+									--	QuestAnnounce2.db.profile.selfColor.r, QuestAnnounce2.db.profile.selfColor.g, QuestAnnounce2.db.profile.selfColor.b = r, g, b
+									--	QuestAnnounce2.db.profile.selfColor.hex = "|cff"..string.format("%02x%02x%02x", QuestAnnounce2.db.profile.selfColor.r * 255, QuestAnnounce2.db.profile.selfColor.g * 255, QuestAnnounce2.db.profile.selfColor.b * 255) 
 									--	end,
 									width = "half"
 								}
@@ -250,24 +250,24 @@ end
 LSM:Register("sound", "PVPFlagCapturedHorde","Sound\\Interface\\PVPFlagCapturedHordeMono.ogg")
 LSM:Register("sound", "PVPFlagCaptured", "Sound\\Interface\\PVPFlagCapturedMono.ogg")
 LSM:Register("sound", "GM ChatWarning", "Sound\\Interface\\GM_ChatWarning.ogg")
-LSM:Register("sound", "Hearthstone-QuestAccepted", "Interface\\Addons\\QuestAnnounce\\Sounds\\Hearthstone-QuestingAdventurer_QuestAccepted.ogg")
-LSM:Register("sound", "Hearthstone-QuestFailed", "Interface\\Addons\\QuestAnnounce\\Sounds\\Hearthstone-QuestingAdventurer_QuestFailed.ogg")
+LSM:Register("sound", "Hearthstone-QuestAccepted", "Interface\\Addons\\QuestAnnounce2\\Sounds\\Hearthstone-QuestingAdventurer_QuestAccepted.ogg")
+LSM:Register("sound", "Hearthstone-QuestFailed", "Interface\\Addons\\QuestAnnounce2\\Sounds\\Hearthstone-QuestingAdventurer_QuestFailed.ogg")
 
 local function openConfig() 
-	InterfaceOptionsFrame_OpenToCategory(QuestAnnounce.optionsFrames.Profiles)
-	InterfaceOptionsFrame_OpenToCategory(QuestAnnounce.optionsFrames.QuestAnnounce)
+	InterfaceOptionsFrame_OpenToCategory(QuestAnnounce2.optionsFrames.Profiles)
+	InterfaceOptionsFrame_OpenToCategory(QuestAnnounce2.optionsFrames.QuestAnnounce2)
 	InterfaceOptionsFrame:Raise()
 end
 
-function QuestAnnounce:SetupOptions()
+function QuestAnnounce2:SetupOptions()
 	self.optionsFrames = {}
 
-	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("QuestAnnounce", getOptions)
-	self.optionsFrames.QuestAnnounce = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("QuestAnnounce", nil, nil, "general")
+	LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable("QuestAnnounce2", getOptions)
+	self.optionsFrames.QuestAnnounce2 = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("QuestAnnounce2", nil, nil, "general")
 
 	configOptions["Profiles"] = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
-	self.optionsFrames["Profiles"] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("QuestAnnounce", "Profiles", "QuestAnnounce", "Profiles")
+	self.optionsFrames["Profiles"] = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("QuestAnnounce2", "Profiles", "QuestAnnounce2", "Profiles")
 
 	LibStub("AceConsole-3.0"):RegisterChatCommand("qa", openConfig)
 end

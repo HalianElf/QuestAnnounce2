@@ -1,6 +1,6 @@
 
-local QuestAnnounce = LibStub("AceAddon-3.0"):NewAddon("QuestAnnounce", "AceEvent-3.0", "AceConsole-3.0")
-local L = LibStub("AceLocale-3.0"):GetLocale("QuestAnnounce")
+local QuestAnnounce2 = LibStub("AceAddon-3.0"):NewAddon("QuestAnnounce2", "AceEvent-3.0", "AceConsole-3.0")
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestAnnounce2")
 
 --[[ vars between functions ]]--
 local questNum = 0
@@ -35,8 +35,8 @@ local defaults = {
 	}
 }
 
---[[ QuestAnnounce Initialize ]]--
-function QuestAnnounce:OnInitialize()
+--[[ QuestAnnounce2 Initialize ]]--
+function QuestAnnounce2:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("QuestAnnounceDB", defaults, true)
 	
 	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
@@ -47,29 +47,29 @@ function QuestAnnounce:OnInitialize()
 	self:SetupOptions()
 end
 
-function QuestAnnounce:OnEnable()
+function QuestAnnounce2:OnEnable()
 	--[[ We're looking at the UI_INFO_MESSAGE for quest messages ]]--
 	self:RegisterEvent("UI_INFO_MESSAGE")
 	self:RegisterEvent("QUEST_WATCH_UPDATE")
 	--self:RegisterEvent("QUEST_LOG_UPDATE")
 
-	self:SendDebugMsg("Addon Enabled :: "..tostring(QuestAnnounce.db.profile.settings.enable))
+	self:SendDebugMsg("Addon Enabled :: "..tostring(QuestAnnounce2.db.profile.settings.enable))
 end
 
 --[[ Event handlers ]]--
-function QuestAnnounce:QUEST_WATCH_UPDATE(event, questIndex)
+function QuestAnnounce2:QUEST_WATCH_UPDATE(event, questIndex)
 	--[[local isComplete = select(6, C_QuestLog.GetInfo(questIndex))
 	if (isComplete == nil) then
 		isComplete = 0
 	end
-	QuestAnnounce:SendDebugMsg("Quest Text: "..isComplete)]]--
+	QuestAnnounce2:SendDebugMsg("Quest Text: "..isComplete)]]--
 	questNum = questIndex
 end
 
-function QuestAnnounce:UI_INFO_MESSAGE(event, id, msg)
+function QuestAnnounce2:UI_INFO_MESSAGE(event, id, msg)
 	if (msg ~= nil) then
 		local questText = gsub(msg, "(.*):%s*([-%d]+)%s*/%s*([-%d]+)%s*$", "%1", 1)
-		QuestAnnounce:SendDebugMsg("Quest Text: "..questText)
+		QuestAnnounce2:SendDebugMsg("Quest Text: "..questText)
 		
 		if (questText ~= msg) then
 			questMsg = msg
@@ -79,7 +79,7 @@ function QuestAnnounce:UI_INFO_MESSAGE(event, id, msg)
 	
 		if (questNum ~= 0 and questMsg ~= nil) then
 			if (settings.enable) then
-				QuestAnnounce:SendDebugMsg("Quest Text: "..questMsg)
+				QuestAnnounce2:SendDebugMsg("Quest Text: "..questMsg)
 				local ii, jj, strItemName, iNumItems, iNumNeeded = string.find(questMsg, "(.*):%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
 				local stillNeeded = iNumNeeded - iNumItems
 				local isComplete = select(6, C_QuestLog.GetInfo(questNum))
@@ -88,25 +88,25 @@ function QuestAnnounce:UI_INFO_MESSAGE(event, id, msg)
 					isComplete = 0
 				end
 	
-				QuestAnnounce:SendDebugMsg("Item Name: "..strItemName.." :: Num Items: "..iNumItems.." :: Num Needed: "..iNumNeeded.." :: Still Need: "..stillNeeded.." :: Completed: "..isComplete)
+				QuestAnnounce2:SendDebugMsg("Item Name: "..strItemName.." :: Num Items: "..iNumItems.." :: Num Needed: "..iNumNeeded.." :: Still Need: "..stillNeeded.." :: Completed: "..isComplete)
 				
 				if(stillNeeded == 0 and settings.every == 0) then
 					if (isComplete == 1) then
-						QuestAnnounce:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
+						QuestAnnounce2:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
 					else
-						QuestAnnounce:SendMsg(questMsg,2) --objective complete
+						QuestAnnounce2:SendMsg(questMsg,2) --objective complete
 					end
-				elseif(QuestAnnounce.db.profile.settings.every > 0) then
+				elseif(QuestAnnounce2.db.profile.settings.every > 0) then
 					local every = math.fmod(iNumItems, settings.every)
-					QuestAnnounce:SendDebugMsg("Every fMod: "..every)
+					QuestAnnounce2:SendDebugMsg("Every fMod: "..every)
 				
 					if(every == 0 and stillNeeded > 0) then
-						QuestAnnounce:SendMsg(L["Progress: "]..questMsg,0)
+						QuestAnnounce2:SendMsg(L["Progress: "]..questMsg,0)
 					elseif(stillNeeded == 0) then
 						if (isComplete == 1) then
-							QuestAnnounce:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
+							QuestAnnounce2:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
 						else
-							QuestAnnounce:SendMsg(questMsg,2) --objective complete
+							QuestAnnounce2:SendMsg(questMsg,2) --objective complete
 						end
 					end
 				end
@@ -118,12 +118,12 @@ function QuestAnnounce:UI_INFO_MESSAGE(event, id, msg)
 	end
 end
 
---[[function QuestAnnounce:UNIT_QUEST_LOG_CHANGED(event, unitName)
+--[[function QuestAnnounce2:UNIT_QUEST_LOG_CHANGED(event, unitName)
 	local settings = self.db.profile.settings
 	
 	if (questNum ~= 0 and questMsg ~= nil) then
 		if (settings.enable) then
-			QuestAnnounce:SendDebugMsg("Quest Text: "..questMsg)
+			QuestAnnounce2:SendDebugMsg("Quest Text: "..questMsg)
 			local ii, jj, strItemName, iNumItems, iNumNeeded = string.find(questMsg, "(.*):%s*([-%d]+)%s*/%s*([-%d]+)%s*$")
 			local stillNeeded = iNumNeeded - iNumItems
 			local isComplete = select(6, C_QuestLog.GetInfo(questNum))
@@ -132,25 +132,25 @@ end
 				isComplete = 0
 			end
 
-			QuestAnnounce:SendDebugMsg("Item Name: "..strItemName.." :: Num Items: "..iNumItems.." :: Num Needed: "..iNumNeeded.." :: Still Need: "..stillNeeded.." :: Completed: "..isComplete)
+			QuestAnnounce2:SendDebugMsg("Item Name: "..strItemName.." :: Num Items: "..iNumItems.." :: Num Needed: "..iNumNeeded.." :: Still Need: "..stillNeeded.." :: Completed: "..isComplete)
 			
 			if(stillNeeded == 0 and settings.every == 0) then
 				if (isComplete == 1) then
-					QuestAnnounce:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
+					QuestAnnounce2:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
 				else
-					QuestAnnounce:SendMsg(questMsg,2) --objective complete
+					QuestAnnounce2:SendMsg(questMsg,2) --objective complete
 				end
-			elseif(QuestAnnounce.db.profile.settings.every > 0) then
+			elseif(QuestAnnounce2.db.profile.settings.every > 0) then
 				local every = math.fmod(iNumItems, settings.every)
-				QuestAnnounce:SendDebugMsg("Every fMod: "..every)
+				QuestAnnounce2:SendDebugMsg("Every fMod: "..every)
 			
 				if(every == 0 and stillNeeded > 0) then
-					QuestAnnounce:SendMsg(L["Progress: "]..questMsg,0)
+					QuestAnnounce2:SendMsg(L["Progress: "]..questMsg,0)
 				elseif(stillNeeded == 0) then
 					if (isComplete == 1) then
-						QuestAnnounce:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
+						QuestAnnounce2:SendMsg(questMsg..L[" -- QUEST COMPLETE"],1) --quest complete
 					else
-						QuestAnnounce:SendMsg(questMsg,2) --objective complete
+						QuestAnnounce2:SendMsg(questMsg,2) --objective complete
 					end
 				end
 			end
@@ -161,33 +161,33 @@ end
 	end
 end]]--
 
-function QuestAnnounce:OnProfileChanged(event, db)
+function QuestAnnounce2:OnProfileChanged(event, db)
  	self.db.profile = db.profile
 end
 
-function QuestAnnounce:OnProfileReset(event, db)
+function QuestAnnounce2:OnProfileReset(event, db)
 	for k, v in pairs(defaults) do
 		db.profile[k] = v
 	end
 	self.db.profile = db.profile
 end
 
-function QuestAnnounce:OnNewProfile(event, db)
+function QuestAnnounce2:OnNewProfile(event, db)
 	for k, v in pairs(defaults) do
 		db.profile[k] = v
 	end
 end
 
 --[[ Sends a debugging message if debug is enabled and we have a message to send ]]--
-function QuestAnnounce:SendDebugMsg(msg)
+function QuestAnnounce2:SendDebugMsg(msg)
 	if(msg ~= nil and self.db.profile.settings.debug) then
-		QuestAnnounce:Print("DEBUG :: "..msg)
+		QuestAnnounce2:Print("DEBUG :: "..msg)
 	end
 end
 
 --[[ Sends a chat message to the selected chat channels and frames where applicable,
 	if we have a message to send; will also send a debugging message if debug is enabled ]]--
-function QuestAnnounce:SendMsg(msg, comp)	
+function QuestAnnounce2:SendMsg(msg, comp)	
 	local announceIn = self.db.profile.announceIn
 	local announceTo = self.db.profile.announceTo
 
@@ -195,7 +195,7 @@ function QuestAnnounce:SendMsg(msg, comp)
 		if(announceTo.chatFrame) then
 			if(announceIn.say) then
 				SendChatMessage(msg, "SAY")
-				QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(SAY) :: "..msg)
+				QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(SAY) :: "..msg)
 			end
 		
 			--[[ GetNumGroupMembers is group-wide; GetNumSubgroupMembers is confined to your group of 5 ]]--
@@ -205,7 +205,7 @@ function QuestAnnounce:SendMsg(msg, comp)
 					SendChatMessage(msg, "PARTY")
 				end
 				
-				QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(PARTY) :: "..msg)
+				QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(PARTY) :: "..msg)
 			end				
 		
 			if(announceIn.instance) then
@@ -213,7 +213,7 @@ function QuestAnnounce:SendMsg(msg, comp)
 					SendChatMessage(msg, "INSTANCE_CHAT")
 				end
 				
-				QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(INSTANCE) :: "..msg)
+				QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(INSTANCE) :: "..msg)
 			end				
 		
 			if(announceIn.guild) then
@@ -221,7 +221,7 @@ function QuestAnnounce:SendMsg(msg, comp)
 					SendChatMessage(msg, "GUILD")
 				end
 				
-				QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(GUILD) :: "..msg)
+				QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(GUILD) :: "..msg)
 			end
 			
 			if(announceIn.officer) then
@@ -229,14 +229,14 @@ function QuestAnnounce:SendMsg(msg, comp)
 					SendChatMessage(msg, "OFFICER")
 				end
 				
-				QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(OFFICER) :: "..msg)
+				QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(OFFICER) :: "..msg)
 			end			
 				
 			if(announceIn.whisper) then
 				local who = announceIn.whisperWho
 				if(who ~= nil and who ~= "") then
 					SendChatMessage(msg, "WHISPER", nil, who)
-					QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg(WHISPER) :: "..who.."-"..msg)
+					QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg(WHISPER) :: "..who.."-"..msg)
 				end
 			end
 			if(announceIn.toSelf) then
@@ -265,5 +265,5 @@ function QuestAnnounce:SendMsg(msg, comp)
 		end
 	end
 	
-	QuestAnnounce:SendDebugMsg("QuestAnnounce:SendMsg - "..msg)
+	QuestAnnounce2:SendDebugMsg("QuestAnnounce2:SendMsg - "..msg)
 end
